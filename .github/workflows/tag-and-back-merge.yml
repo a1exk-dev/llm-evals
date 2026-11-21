@@ -102,6 +102,9 @@ jobs:
               pr=${url##*/}
             fi
             # A merge into a tag target is always a merge commit.
+            # GitHub refuses --auto when no required check is pending
+            # ("clean status"). Then merge at once.
             gh pr merge "$pr" --auto --merge \
-              || echo "::warning::Auto-merge failed for #${pr}. Merge the pull request by hand."
+              || gh pr merge "$pr" --merge \
+              || echo "::warning::The merge of #${pr} failed. Examine the pull request."
           done
