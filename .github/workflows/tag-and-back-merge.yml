@@ -1,0 +1,107 @@
+# Tag and Back-merge job for the semver skill (Setting "Tag and back-merge: CI").
+# After a release/X.Y.Z or hotfix/* pull request merges into main, this job
+# tags the merge commit and opens a merge-commit pull request from main into
+# develop, and also into the open release/* branch after a hotfix.
+name: tag-and-back-merge
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: tag-and-back-merge
+  cancel-in-progress: false
+
+jobs:
+  tag-and-back-merge:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TAG_PREFIX: v
+      DEVELOPMENT: develop
+      PRODUCTION: main
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Find the merged branch and the version
+        id: version
+        run: |
+          set -eu
+          head=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/pulls" \
+            --jq "[.[] | select(.merged_at != null and .base.ref == \"${PRODUCTION}\")][0].head.ref // \"\"")
+          echo "Merged branch: ${head:-none}"
+          case "$head" in
+            release/*)
+              version=${head#release/}
+              ;;
+            hotfix/*)
+              last=$(git tag --list "${TAG_PREFIX}[0-9]*.[0-9]*.[0-9]*" --sort=-v:refname \
+                | grep -E "^${TAG_PREFIX}[0-9]+\.[0-9]+\.[0-9]+$" | head -n1 || true)
+              last=${last#"$TAG_PREFIX"}
+              [ -n "$last" ] || last=0.0.0
+              version="${last%.*}.$(( ${last##*.} + 1 ))"
+              ;;
+            *)
+              echo "The push is not a release or hotfix merge. Nothing to do."
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+              exit 0
+              ;;
+          esac
+          if ! printf '%s' "$version" | grep -Eq '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$'; then
+            echo "::error::Version '$version' from branch '$head' is not X.Y.Z."
+            exit 1
+          fi
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG_PREFIX}${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Make the tag
+        if: steps.version.outputs.skip == 'false'
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          set -eu
+          if git rev-parse --verify --quiet "refs/tags/${TAG}^{commit}" >/dev/null; then
+            echo "Tag ${TAG} exists. A released version does not change."
+          else
+            git tag "$TAG" "$GITHUB_SHA"
+            git push origin "refs/tags/${TAG}"
+          fi
+
+      - name: Open the Back-merge pull requests
+        if: steps.version.outputs.skip == 'false'
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          set -eu
+          targets="$DEVELOPMENT"
+          for ref in $(git for-each-ref --format='%(refname:strip=3)' 'refs/remotes/origin/release/*'); do
+            if ! git rev-parse --verify --quiet "refs/tags/${TAG_PREFIX}${ref#release/}" >/dev/null; then
+              targets="$targets $ref"
+            fi
+          done
+          for target in $targets; do
+            if git merge-base --is-ancestor "$GITHUB_SHA" "origin/${target}"; then
+              echo "${target} already contains ${TAG}."
+              continue
+            fi
+            existing=$(gh pr list --head "$PRODUCTION" --base "$target" --state open --json number --jq '.[0].number // ""')
+            if [ -n "$existing" ]; then
+              echo "Back-merge pull request #${existing} into ${target} is open."
+              pr="$existing"
+            else
+              url=$(gh pr create --base "$target" --head "$PRODUCTION" \
+                --title "chore: back-merge ${TAG} into ${target}" \
+                --body "Back-merge of ${TAG} from ${PRODUCTION} into ${target}. The tag-and-back-merge job opened this pull request.")
+              pr=${url##*/}
+            fi
+            # A merge into a tag target is always a merge commit.
+            gh pr merge "$pr" --auto --merge \
+              || echo "::warning::Auto-merge failed for #${pr}. Merge the pull request by hand."
+          done
