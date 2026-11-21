@@ -8,7 +8,7 @@ Issues are tracked in GitHub Issues (a1exk-dev/llm-evals) via the `gh` CLI. See 
 
 ### Domain docs
 
-Multi-context: one context per eval setup under `evals/<setup>/` (own `GLOSSARY.md` + `docs/adr/`), indexed by root `GLOSSARY-MAP.md`. See `docs/agents/domain.md`.
+Multi-context: one context per topic under `evals/<topic>/` (own `GLOSSARY.md` + `docs/adr/`), indexed by root `GLOSSARY-MAP.md`. See `docs/agents/domain.md`.
 
 ### Auto-merge
 

@@ -5,29 +5,29 @@ How the engineering skills should consume this repo's domain documentation when 
 ## Before exploring, read these
 
 - **`GLOSSARY.md`** at the repo root, or
-- **`GLOSSARY-MAP.md`** at the repo root if it exists: it points at one `GLOSSARY.md` per context. Read each one relevant to the topic.
-- **`docs/adr/`**: read ADRs that touch the area you're about to work in. Also check `evals/<setup>/docs/adr/` for decisions scoped to an eval setup.
+- **`GLOSSARY-MAP.md`** at the repo root if it exists: it points at one `GLOSSARY.md` per context. Read each one relevant to the subject.
+- **`docs/adr/`**: read ADRs that touch the area you're about to work in. Also check `evals/<topic>/docs/adr/` for decisions scoped to a topic.
 
 If any of these files don't exist, **proceed silently**. Don't flag their absence; don't suggest creating them upfront. The `/domain-modeling` skill (reached via `/grill-with-docs` and `/improve-codebase-architecture`) creates them lazily when terms or decisions actually get resolved.
 
 ## File structure
 
-This repo is **multi-context**: one context per eval setup, each in its own folder under `evals/`. `GLOSSARY-MAP.md` at the root lists the contexts and points at each one's `GLOSSARY.md`.
+This repo is **multi-context**: one context per topic, each in its own folder under `evals/`. `GLOSSARY-MAP.md` at the root lists the contexts and points at each one's `GLOSSARY.md`.
 
 ```
 /
 ├── GLOSSARY-MAP.md                    ← index of contexts
 ├── docs/adr/                          ← repo-wide decisions (shared harness, tooling)
 └── evals/
-    ├── <setup-a>/
+    ├── <topic-a>/
     │   ├── GLOSSARY.md
-    │   └── docs/adr/                  ← decisions for this eval setup
-    └── <setup-b>/
+    │   └── docs/adr/                  ← decisions for this topic
+    └── <topic-b>/
         ├── GLOSSARY.md
         └── docs/adr/
 ```
 
-When working inside `evals/<setup>/`, read that setup's `GLOSSARY.md` and `docs/adr/`, plus the root `docs/adr/`. A term may mean different things in different setups; don't carry definitions across contexts unless `GLOSSARY-MAP.md` says they're shared.
+When working inside `evals/<topic>/`, read that topic's `GLOSSARY.md` and `docs/adr/`, plus the root `docs/adr/`. A term can mean different things in different topics. Do not carry definitions across contexts unless `GLOSSARY-MAP.md` says they are shared.
 
 ## Use the glossary's vocabulary
 
