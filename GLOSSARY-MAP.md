@@ -14,4 +14,5 @@ A topic is one group of evals that test one capability of a model. Each topic is
 ## Relationships
 
 - **All topics**: code makes each score, with no judge model. See `docs/adr/0001-deterministic-scoring.md`.
-- **language → agents**: the agents pipelines use the languages of the language topic.
+- **All topics**: only translation uses en, de, pl, and ru. All other evals use English. Before you select the languages of an eval, read `docs/adr/0002-english-outside-translation.md`.
+- **language → agents**: only the Email reply pipeline uses the 4 languages of the language topic. The other agents pipelines use English.
