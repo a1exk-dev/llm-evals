@@ -1,0 +1,12 @@
+{
+  "identical": 100.000000,
+  "en-edit": 54.888759,
+  "punctuation": 46.155691,
+  "repeats": 31.820937,
+  "pl": 42.613751,
+  "ru": 44.806505,
+  "corpus-with-empty": 24.611201,
+  "all-empty": 0.000000,
+  "no-match": 0.000000,
+  "texts-ru": 84.988570
+}
