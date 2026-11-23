@@ -1,0 +1,60 @@
+{
+  "base_url": "https://forum.kestrelworks.example",
+  "site_name": "Kestrel Works Forum",
+  "site_title": "Kestrel Works Forum",
+  "site_domain_name": "forum.kestrelworks.example",
+  "destination": "support@kestrelworks.example",
+  "former_title": "Re: Sauna booking for 14 March",
+  "number_of_days": "45",
+  "short_url": "https://forum.kestrelworks.example/t/8412",
+  "username": "milena_k",
+  "user_url": "https://forum.kestrelworks.example/u/milena_k",
+  "domains": "cheap-tiles.example",
+  "month_year": "10/2026",
+  "url": "https://forum.kestrelworks.example/badges/31/member-of-the-month",
+  "email_token": "7f3c9a2e41d85b06",
+  "installed_version": "3.4.1",
+  "new_version": "3.5.0",
+  "topic_title": "Kayak trip to Lake Wigry",
+  "topic_url": "https://forum.kestrelworks.example/t/kayak-trip-to-lake-wigry/2207",
+  "confirm_unsubscribe_link": "https://forum.kestrelworks.example/email/unsubscribe/c41e9d07",
+  "inviter_name": "Tomasz Brzoza",
+  "invite_link": "https://forum.kestrelworks.example/invites/R9xK2pQe",
+  "reason": {
+    "en": "The post has no date for the trip.",
+    "pl": "Post nie podaje daty wycieczki.",
+    "ru": "В сообщении нет даты поездки."
+  },
+  "feedback": {
+    "en": "Please add the start date and the meeting point.",
+    "pl": "Dodaj datę wyjazdu i miejsce zbiórki.",
+    "ru": "Добавьте дату начала и место встречи."
+  },
+  "edit_instructions": {
+    "en": "Edit your post and send it again for review.",
+    "pl": "Popraw swój post i wyślij go ponownie do sprawdzenia.",
+    "ru": "Отредактируйте сообщение и снова отправьте его на проверку."
+  },
+  "original_post": {
+    "en": "Who wants to join a kayak trip next month? We need six people.",
+    "pl": "Kto chce dołączyć do spływu kajakowego w przyszłym miesiącu? Potrzebujemy sześciu osób.",
+    "ru": "Кто хочет поехать на байдарках в следующем месяце? Нам нужно шесть человек."
+  },
+  "topic_excerpt": {
+    "en": "We plan a two-day trip with one night in tents near the shore.",
+    "pl": "Planujemy dwudniową wycieczkę z jednym noclegiem w namiotach nad brzegiem.",
+    "ru": "Мы планируем двухдневную поездку с одной ночёвкой в палатках у берега."
+  },
+  "site_description": {
+    "en": "A forum for the members of a small sports club",
+    "pl": "Forum dla członków małego klubu sportowego",
+    "ru": "Форум для членов небольшого спортивного клуба"
+  },
+  "download_link": "https://forum.kestrelworks.example/uploads/short-url/x7KpL2.zip",
+  "new_email": "milena.k@post.example",
+  "role": {
+    "en": "moderator",
+    "pl": "moderator",
+    "ru": "модератор"
+  }
+}
