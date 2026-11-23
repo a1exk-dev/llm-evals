@@ -59,9 +59,9 @@ A candidate is a text that has a version in en, pl, and ru, with 20 to 150 Engli
 
 ## Changes to the texts
 
-We changed each text in all 3 languages, so that training data on the sources does not raise the scores. Claude Opus 5.5 drafted the changes. A person reviews all 110 texts in the 3 languages. The `changes` field of each row in `data/texts.jsonl` gives the changes of that text.
+We changed each text in all 3 languages, so that training data on the sources does not raise the scores. Claude Opus 5.5 drafted the changes. Then 5 separate Claude Opus 5.5 agents checked the grammar, the agreement of the 3 versions, and the sense of each change. A person reviews all 110 texts in the 3 languages. The `changes` field of each row in `data/texts.jsonl` gives the changes of that text.
 
-- In all 110 texts, names and numbers changed. Examples are people, places, companies, products, dates, counts, versions, and section numbers.
+- In all 110 texts, names and numbers changed. Examples are people, places, companies, products, dates, counts, versions, and section numbers. Each text has at least 2 changes.
 - When a text had no name or number to change, we added a short detail with a name or a number. For example, "Every cluster needs at least one worker node" became "Every cluster in the Bergen office needs at least three worker nodes".
 - In 30 texts, 5 of each kind, we added one unexpected piece, for example "Your new account comes with a free goat." The `unexpected` field gives the en text of the piece.
 - The rest of each text stays as the source gives it. We did not correct the translation faults of the sources.
