@@ -7,6 +7,8 @@ The translation eval uses 110 texts. Each text has an en, a pl, and a ru version
 | File | Content |
 |---|---|
 | `data/originals.jsonl` | The 110 texts as the sources give them, after extraction and placeholder replacement. |
+| `data/texts.jsonl` | The 110 changed texts that the eval uses. Each row gives its changes, its unexpected piece, and its source fixes. |
+| `scripts/check-texts.ts` | Checks each changed text against its original. |
 | `data/email-placeholders.json` | The fixed value of each Discourse placeholder. |
 | `data/studies-pl-map.json` | The pl block of the whitepaper for each studies text. We aligned these blocks by hand. |
 | `scripts/fetch-sources.sh` | Downloads the pinned sources into `.cache/`. |
@@ -54,6 +56,24 @@ A candidate is a text that has a version in en, pl, and ru, with 20 to 150 Engli
 - HTML entities such as `&mdash;` become their characters.
 - In the studies texts, `2<sup>187</sup>` becomes `2^187`. Each other superscript is a note mark, and the script removes it. The script also removes the backslash of escaped Markdown characters in the pl whitepaper.
 - In the emails, the script replaces each placeholder with its value from `data/email-placeholders.json`. A name, a title, a URL, a number, or a code has one value for the 3 languages. Free text has one value for each language.
+
+## Changes to the texts
+
+We changed each text in all 3 languages, so that training data on the sources does not raise the scores. Claude Opus 5.5 drafted the changes. A person reviews all 110 texts in the 3 languages. The `changes` field of each row in `data/texts.jsonl` gives the changes of that text.
+
+- In all 110 texts, names and numbers changed. Examples are people, places, companies, products, dates, counts, versions, and section numbers.
+- When a text had no name or number to change, we added a short detail with a name or a number. For example, "Every cluster needs at least one worker node" became "Every cluster in the Bergen office needs at least three worker nodes".
+- In 30 texts, 5 of each kind, we added one unexpected piece, for example "Your new account comes with a free goat." The `unexpected` field gives the en text of the piece.
+- The rest of each text stays as the source gives it. We did not correct the translation faults of the sources.
+- We corrected only mechanical faults, for example a `"` in place of an apostrophe. The `fixes` field, or the `changes` field, gives each correction.
+- In the documents texts, "Public License" became "Alder Public License", and each section number went up by 1. The documents texts are not a Creative Commons license.
+- In the emails, each email has its own invented site name, domain, user name, and codes. Discourse became the invented product Threadwell.
+
+To check the changed texts, run this command in this folder:
+
+```sh
+bun scripts/check-texts.ts
+```
 
 ## Known faults of the sources
 
